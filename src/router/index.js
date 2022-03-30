@@ -2,24 +2,44 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 
 const routes = [
+
   {
     path: '/',
-    name: 'home',
-    component: HomeView,
+    component: () => import('../views/FrontView.vue'),
+    children: [
+      {
+        path: '/',
+        name: 'home',
+        component: HomeView,
+      },
+      // 第二層不用斜線
+      {
+        path: 'products',
+        component: () => import('../views/ProductsView.vue'),
+      },
+      {
+        path: 'cart',
+        component: () => import('../views/CartView.vue'),
+      },
+    ],
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    path: '/admin',
+    component: () => import('../views/DashboardView.vue'),
+    children: [
+      // 第二層不用斜線
+      {
+        path: 'products',
+        component: () => import('../views/AdminProducts.vue'),
+      },
+    ],
   },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+  linkActiveClass: 'active', // Bootstrap啟用中樣式
 });
 
 export default router;
